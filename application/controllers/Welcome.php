@@ -20,6 +20,12 @@ class Welcome extends Application
 	public function index()
 	{
 		$this->data['pagebody'] = 'welcome_message';
+
+        $this->data['numParts'] = $this->factory->getCount('parts');
+        $this->data['numBots'] = $this->factory->getCount('bots');
+        $this->data['spentAmount'] = $this->factory->getAmount('0');
+        $this->data['earnedAmount'] = $this->factory->getAmount('1');
+        
 		$this->render(); 
 	}
 

@@ -3,6 +3,11 @@
 Team membership: Yiaoping (Captain), Terry, Fred, Jamie and Tim
 
 
+#H2 Updated Version 0.4
+Release Date: February 12 2017
+*Added Assembly controller and view
+..*Terry Kang
+
 #H2 Updated Version 0.3
 Release Date: February 11 2017
 *Added About controller and view

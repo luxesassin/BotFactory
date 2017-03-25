@@ -28,7 +28,11 @@
         <img id="foot" src=""/>
     </div>
 </div>
-        
+
+<h5>
+<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
+</h5>
+
 <script>
     function buildIt(){
         var checkedItems = document.querySelectorAll('input[name="partCheckbox"]:checked');

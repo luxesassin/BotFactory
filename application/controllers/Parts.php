@@ -13,7 +13,6 @@ class Parts extends Application{
 			$partArr[] = array ('image' => $record->image, 'partname' => $record->ca, 'line' => $record->builtAt );
 		} 
         $this->data['parts'] = $partArr;
-        $this->data['title'] = 'test';
 		$this->render();
 		
     }

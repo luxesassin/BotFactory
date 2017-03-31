@@ -27,23 +27,23 @@ class Factory extends CI_Model {
     // parts table
     var $parts = array(
 		array('id' => 'A10001', 'code' => 'A1', 'ca' => 'CA5670', 'builtAt' => 'BotFactory',
-              'builtDate' => '2017-02-09 10:02:01', 'image' => 'a1.jpg', 'isValid' => '1'),
+              'builtDate' => '2017-02-09 10:02:01', 'image' => 'a1.jpeg', 'isValid' => '1'),
         array('id' => 'A20001', 'code' => 'A2', 'ca' => 'CA5671', 'builtAt' => 'BotFactory',
-              'builtDate' => '2017-02-09 10:02:01', 'image' => 'a2.jpg', 'isValid' => '1'),
+              'builtDate' => '2017-02-09 10:02:01', 'image' => 'a2.jpeg', 'isValid' => '1'),
         array('id' => 'A30001', 'code' => 'A3', 'ca' => 'CA5672', 'builtAt' => 'BotFactory',
-              'builtDate' => '2017-02-09 10:02:01', 'image' => 'a3.jpg', 'isValid' => '1'),
+              'builtDate' => '2017-02-09 10:02:01', 'image' => 'a3.jpeg', 'isValid' => '1'),
         array('id' => 'B10001', 'code' => 'B1', 'ca' => 'CA8880', 'builtAt' => 'BotFactory',
-              'builtDate' => '2017-02-09 10:02:01', 'image' => 'b1.jpg', 'isValid' => '1'),
+              'builtDate' => '2017-02-09 10:02:01', 'image' => 'b1.jpeg', 'isValid' => '1'),
         array('id' => 'B20001', 'code' => 'B2', 'ca' => 'CA8881', 'builtAt' => 'BotFactory',
-              'builtDate' => '2017-02-09 10:02:01', 'image' => 'b2.jpg', 'isValid' => '1'),
+              'builtDate' => '2017-02-09 10:02:01', 'image' => 'b2.jpeg', 'isValid' => '1'),
         array('id' => 'B30001', 'code' => 'B3', 'ca' => 'CA8882', 'builtAt' => 'BotFactory',
-              'builtDate' => '2017-02-09 10:02:01', 'image' => 'b3.jpg', 'isValid' => '1'),
+              'builtDate' => '2017-02-09 10:02:01', 'image' => 'b3.jpeg', 'isValid' => '1'),
         array('id' => 'C10001', 'code' => 'C1', 'ca' => 'CA8883', 'builtAt' => 'BotFactory',
-              'builtDate' => '2017-02-09 10:02:01', 'image' => 'c1.jpg', 'isValid' => '1'),
+              'builtDate' => '2017-02-09 10:02:01', 'image' => 'c1.jpeg', 'isValid' => '1'),
         array('id' => 'C20001', 'code' => 'C2', 'ca' => 'CA8886', 'builtAt' => 'BotFactory',
-              'builtDate' => '2017-02-09 10:02:01', 'image' => 'c2.jpg', 'isValid' => '1'),
+              'builtDate' => '2017-02-09 10:02:01', 'image' => 'c2.jpeg', 'isValid' => '1'),
         array('id' => 'C30001', 'code' => 'C3', 'ca' => 'CA8889', 'builtAt' => 'BotFactory',
-              'builtDate' => '2017-02-09 10:02:01', 'image' => 'c3.jpg', 'isValid' => '1')
+              'builtDate' => '2017-02-09 10:02:01', 'image' => 'c3.jpeg', 'isValid' => '1')
 	);
     
     // history table
@@ -114,4 +114,5 @@ class Factory extends CI_Model {
         
 		return $amount;
     }
+    
 }

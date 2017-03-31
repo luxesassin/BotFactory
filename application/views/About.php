@@ -7,4 +7,7 @@
 <h2>Technologies </h2>
 <p>The website uses the jquery Javascript and bootstrap framework.</p>
 <h2>Extra</h2>
-<p>This website is created in Februarary of 2017 for Comp 4711 BCIT</a>.</p>
+<p>This website is created in Februarary of 2017 for Comp 4711 BCIT</a>.</p><br/>
+<h5>
+<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
+</h5>

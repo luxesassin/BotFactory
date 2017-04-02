@@ -28,7 +28,7 @@ class Manage extends Application
     }
     
     // polish method
-    private function polish()
+    function polish()
     {
         // get role from session
         $role = $this->session->userdata('userrole');
@@ -105,8 +105,8 @@ class Manage extends Application
     // send request to RPC to buy bots
     function sellbot()
     {
-        // check if there is one and only one item checked
-        $invalid = 0;
+        // check if its a valid choice
+        $valid = 0;
         
         if(isset($_POST['cb'])) {
             // get IDs
@@ -114,6 +114,7 @@ class Manage extends Application
 
             // only one picked
             if (count($ids) == 1) {
+                $valid = 1;
                 $server = $this->data['umbrella'] . '/work/buymybot';
 
                 // get pieces in bots table given $id
@@ -146,18 +147,14 @@ class Manage extends Application
 
                     // update history table
                     $amount = $balance - $old_balance;
-                    $message = "1 bot sold, id: ".$ids[0];
+                    $message = "Shipped 1 bot, id: ".$ids[0];
                     $this->data['message'] = $message;
-                    $this->factory->addHistory('1', $amount, $message);
+                    $this->factory->addHistory(1, $amount, $message);
                 }
-            } else {
-                $invalid = 1;
-            }
-        } else {
-            $invalid = 1;
+            } 
         }
 
-        if ($invalid == 1)
+        if ($valid == 0)
             $this->data['message'] = "Please pick a bot for sale!";
         
         $this->polish();

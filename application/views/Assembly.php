@@ -5,62 +5,51 @@
 -->
 
 <h1>Assembly Page</h1>
-<div id="selectParts">
-    <h3>Select Parts</h3>
+<h3>Select Parts</h3>
+<form name="frm" id="frm" method="post" action="/Assembly/handle">
     <div class="row">
-        {parts}
+        <div class="col-sm-4">
+            {parts_data1}
+            <div class="parts-align">
+                <input type="checkbox" name="cb1[]" value="{id}">
+                <img width="60%" height="60%" src="/pix/{image}" title="{model}, {plant}"/>
+            </div>
+            {/parts_data1}
+        </div>
+         <div class="col-sm-4">
+            {parts_data2}
+            <div class="parts-align">
+                <input type="checkbox" name="cb2[]" value="{id}">
+                <img width="60%" height="60%" src="/pix/{image}" title="{model}, {plant}"/>
+            </div>
+            {/parts_data2}
+         </div>
+         <div class="col-sm-4">
+            {parts_data3}
+            <div class="parts-align">
+                <input type="checkbox" name="cb3[]" value="{id}">
+                <img width="60%" height="60%" src="/pix/{image}" title="{model}, {plant}"/>
+            </div>
+            {/parts_data3}
+         </div>
+    </div><br>
+    
+    <h3>Assembled Bots</h3>
+    <div class="row">
+        {bots_data}
         <div class="col-sm-4">
             <div class="parts-align">
-                <input type="checkbox" name="partCheckbox" data-image="{image}" data-id="{id}" data-code="{code}">
-                <img width="60%" height="60%" src="/pix/{image}" title="{code}, {plant}"/>
+                <input type="checkbox" name="cb[]" value="{id}">
+                <img width="60%" height="60%" src="/pix/{model}.jpg" title="model: {model}"/>
             </div>
         </div>
-        {/parts}
+        {/bots_data}
     </div>
-    <div class="field-align">
-        <span><button onclick="assemble()">Assemble it</button></span>
-        <span class="span-align"><button onclick="">Return to head office</button></span>
+    <div class="row btn-align2">
+        <span><input type="submit" name="assemble" value="Assemble" class="btn btn-5"/></span>
+        <span class="span-align2"><input type="submit" name="recycle" value="Recycle" class="btn btn-5"/></span>
     </div>
-</div>
-
-<br>
-<div id="assemblingBot" hidden>
-    <h3>Built bot</h3>
-    <form id="assembleForm" onsubmit="return confirm()" method="post" action="Assembly/assemble">
-        <div class="row">
-            <div class="col">
-                <img id="head" src=""/>
-                <input type="text" name="head" id="headCode" hidden>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <img id="body" src=""/>
-                <input type="text" name="body" id="bodyCode" hidden>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <img id="foot" src=""/>
-                <input type="text" name="foot" id="footCode" hidden>
-            </div>
-        </div>
-        <button type="submit" value="Confirm">Confirm</button>
-        <button type="reset" onclick="cancel()" value="Cancel">Cancel</button>
-    </form>
-</div>
-
-<h3>Assembled Bot(s)</h3>
-<div class="row">
-    {bots}
-    <div class="col-sm-4">
-        <div class="parts-align">
-            <input type="checkbox" name="botCheckbox" data-image="{model}.jpg" data-code="{pieces}">
-            <img width="60%" height="60%" src="/pix/{model}.jpg" title="model: {model}"/>
-        </div>
+    <div class="row msg">
+    {message}
     </div>
-    {/bots}
-</div>
-<button onclick="">Ship it</button>
-
-<script type="text/javascript" src="js/assembly.js"></script>
+</form>

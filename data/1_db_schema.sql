@@ -28,18 +28,11 @@ CREATE TABLE IF NOT EXISTS `history` (
     `id`          INT AUTO_INCREMENT,
     `transId`     CHAR(10),            -- T171234567
     `transDate`   DATETIME,            -- 2017-10-09 10:02:01
-    `type`        CHAR(1),             -- 0-purchase, 1-sell/shipment, 2-return
+    `type`        CHAR(1),             -- 0-purchase, 1-sell/shipment, 2-return, 3-assemble
     `amount`      FLOAT(8,2),          -- 100.50
     `detail`      VARCHAR(100),
     `isValid`     CHAR(1) DEFAULT '1',
     PRIMARY KEY(`id`)
-);
-
--- unit price table
-DROP TABLE IF EXISTS `unitprice`;
-CREATE TABLE IF NOT EXISTS `unitprice` (
-    `type`      CHAR(1) NOT NULL,      -- 0-purchase/build, 1-sell/shipment, 2-return
-    `price`     FLOAT(8,2) NOT NULL    -- 20.00
 );
 
 -- Session table
@@ -59,6 +52,13 @@ CREATE TABLE IF NOT EXISTS `properties` (
     `id`    VARCHAR(16) NOT NULL,
     `value` VARCHAR(256) NOT NULL,
     PRIMARY KEY(`id`)
+);
+
+-- sorts table
+DROP TABLE IF EXISTS `sorts`;
+CREATE TABLE IF NOT EXISTS `sorts` (
+    `id`    VARCHAR(16) NOT NULL,
+    `value` VARCHAR(256) NOT NULL
 );
 
 

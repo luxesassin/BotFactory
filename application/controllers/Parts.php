@@ -19,6 +19,7 @@ class Parts extends Application{
         $this->data['umbrella'] = $this->properties->get('rpc');
         $this->trader = $this->properties->get('plant');
         $this->apikey = $this->properties->get('apikey');
+        $this->plant = "umbrella";
     }
     
     // index method, call polish() while loading
@@ -27,7 +28,7 @@ class Parts extends Application{
     }
     
     // polish method
-    private function polish()
+    function polish()
     {
         $this->data['balance'] = $this->properties->get('balance');
         
@@ -52,7 +53,7 @@ class Parts extends Application{
     function buildpart()
     {
         $server = $this->data['umbrella'] . '/work/mybuilds';
-
+        
         // we need our API key
         $apikey = $this->properties->get('apikey');
         $this->data['workparms'] = [['key' => 'key', 'value' => $apikey]];
@@ -81,8 +82,8 @@ class Parts extends Application{
             
             // update history table
             $amount = $balance - $old_balance;
-            $message = "Built " . $count . " bots";
-            $this->factory->addHistory('0', $amount, $message);
+            $message = "Built " . $count . " parts";
+            $this->factory->addHistory(0, $amount, $message);
         }
 
         $this->polish();
@@ -92,7 +93,7 @@ class Parts extends Application{
     function buybox()
     {
         $server = $this->data['umbrella'] . '/work/buybox';
-
+        
         // we need our API key
         $apikey = $this->properties->get('apikey');
         $this->data['workparms'] = [['key' => 'key', 'value' => $apikey]];
@@ -106,7 +107,7 @@ class Parts extends Application{
             $count = 0;
             $results = json_decode($result);
 
-            // update bots table
+            // update parts table
             foreach ($results as $record) {
                 $this->db->insert('parts', $record);
                 $count++;
@@ -123,7 +124,7 @@ class Parts extends Application{
             $amount = $balance - $old_balance;
             if ($amount < 0) $amount = -1 * $amount;
             $message = "Purchased " . $count . " bots";
-            $this->factory->addHistory('0', $amount, $message);
+            $this->factory->addHistory(0, $amount, $message);
         }
 
         $this->polish();

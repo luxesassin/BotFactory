@@ -25,11 +25,11 @@ class Factory extends CI_Model {
     public function remove($table, $which)
     {
         $this->db->trans_start();
-        $this->isValid = '0';
-        $this->db->update($table, $this, array('id' => $which));
+        $this->db->where('id', $which);
+        $this->db->delete($table); 
         $this->db->trans_complete();
     }
-
+    
     // retrieve all of the quotes
     public function all($table)
     {
@@ -66,11 +66,11 @@ class Factory extends CI_Model {
     public function addBots($model, $comp, $image)
     {
         $this->db->trans_start();
-        $this->model = $model;
-        $this->composition = $comp;
-        $this->image = $image;
-
-        $this->db->insert('Bots', $this);
+        $data = array( 
+            'model' => $model, 
+            'composition' => $comp, 
+            'image' => $image);
+        $this->db->insert('Bots', $data);
         $this->db->trans_complete();
     }
     
@@ -78,14 +78,16 @@ class Factory extends CI_Model {
     public function addParts($code, $ca, $builtAt, $image)
     {
         $this->db->trans_start();
-        $this->code = $code;
-        $this->ca = $ca;
-        $this->builtAt = $builtAt;
-        $this->builtDate = date('Y-m-d H:i:s');
-        $this->image = $image;
-
-        $this->db->insert('Parts', $this);
+        $data = array( 
+            'code' => $code, 
+            'ca' => $ca, 
+            'builtAt' => $builtAt, 
+            'builtDate' => date('Y-m-d H:i:s'), 
+            'image' => $image);
+        $this->db->insert('Parts', $data);
         $this->db->trans_complete();
+    
+        
     }
     
     /* 
@@ -97,14 +99,20 @@ class Factory extends CI_Model {
     public function addHistory($type, $amount, $detail)
     {
         $this->db->trans_start();
-        $this->transDate = date('Y-m-d H:i:s');
-        $this->type = $type;
-        $this->amount = $amount;
-        $this->detail = $detail;
-        $this->db->insert('History', $this);
+        $data = array( 
+            'transDate' => date('Y-m-d H:i:s'), 
+            'type' => $type, 
+            'amount' => $amount, 
+            'detail' => $detail 
+        );
+        $this->db->insert("History", $data);
         $id = $this->db->insert_id();
-        $this->transId = makeTransId($id);
-        $this->db->update('History', $this, array('id' => $id));
+        $data = array( 
+            'transId' => makeTransId($id)
+        );
+        
+        $this->db->where('id', $id);
+        $this->db->update('History', $data);
         $this->db->trans_complete();
     }
 }

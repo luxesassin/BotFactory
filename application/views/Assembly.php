@@ -1,4 +1,3 @@
-
 <!--
  * This is the view for assembly page.
  * User can selects parts from list to assemble a new bot or
@@ -11,13 +10,17 @@
     <div class="row">
         {parts}
         <div class="col-sm-4">
-            <input type="checkbox" name="partCheckbox" data-image="{image}" data-id="{id}" data-code="{code}" data-ca="{ca}">
-            <img width="80%" height="80%" src="/pix/{image}"/>
+            <div class="parts-align">
+                <input type="checkbox" name="partCheckbox" data-image="{image}" data-id="{id}" data-code="{code}">
+                <img width="60%" height="60%" src="/pix/{image}" title="{code}, {plant}"/>
+            </div>
         </div>
         {/parts}
     </div>
-    <button onclick="assemble()">Assemble it</button>
-    <button onclick="">Return to head office</button>
+    <div class="field-align">
+        <span><button onclick="assemble()">Assemble it</button></span>
+        <span class="span-align"><button onclick="">Return to head office</button></span>
+    </div>
 </div>
 
 <br>
@@ -51,15 +54,13 @@
 <div class="row">
     {bots}
     <div class="col-sm-4">
-        <input type="checkbox" name="botCheckbox" data-image="{image}" data-code="{code}" data-ca="{ca}">
-        <img width="80%" height="80%" src="/pix/{image}"/>
+        <div class="parts-align">
+            <input type="checkbox" name="botCheckbox" data-image="{model}.jpg" data-code="{pieces}">
+            <img width="60%" height="60%" src="/pix/{model}.jpg" title="model: {model}"/>
+        </div>
     </div>
     {/bots}
 </div>
 <button onclick="">Ship it</button>
 
-        
-<h5>
-<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
-</h5>
 <script type="text/javascript" src="js/assembly.js"></script>

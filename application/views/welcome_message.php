@@ -1,8 +1,13 @@
-<div id="container">
+<!--
+ * This is the view for Home page. It contains a dashboard of sorts.
+ * The page data is provided or calculated from the database, and 
+ * is accessible to any user role.
+-->
+<div id="container2">
     <h1>{pagetitle}</h1>
 
     <div id="body">
-        <p class="chart_align"></p>
+        <p class="chart-align"></p>
         <div class="row">
             <div class="col-md-3 col-sm-6 col-xs-6">
                 <div class="panel panel-back yok-box">
@@ -77,6 +82,4 @@
 
         </script>
     </div>
-
-    <p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
 </div>

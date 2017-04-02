@@ -6,53 +6,161 @@
 
 class Manage extends Application
 {
-    public function index(){
+    function __construct()
+    {
+        parent::__construct();
+        
+        // basic settings
+        $this->data['title'] = 'Manage';
+        $this->data['pagebody'] = 'Manage';
+        $this->data['workparms'] = array();
+        $this->data['workresult'] = '';
+
+        // get rpc & plant
+        $this->data['umbrella'] = $this->properties->get('rpc');
+        $this->trader = $this->properties->get('plant');
+        $this->data['message'] = '';
+    }
+    
+    // index method, call polish() while loading
+    function index(){
+        $this->polish();
+    }
+    
+    // polish method
+    private function polish()
+    {
         // get role from session
         $role = $this->session->userdata('userrole');
         if ($role != ROLE_OWNER) {
             redirect($_SERVER['HTTP_REFERER']); // back where we came from
         }
-        
-        $this->data['pagebody'] = 'manage';
-        $this->data['registered'] = isset($this->session->apikey);
+
+        $this->data['bots'] = $this->factory->all('bots');
         $this->render();
     }
     
-    function rebootme(){
-        if(isset($this->session->apikey)){
-            $this->load->library("unirest");
-            $url = 'https://umbrella.jlparry.com/work/rebootme?key=' . $this->session->apikey;       
-            $response = $this->unirest->get($url, $headers = array());
+    // register on RPC
+    function registerme()
+    {
+        // obtain input from the login page
+        if (isset($_POST['plant']) && isset($_POST['token'])) {
+            $server = $this->data['umbrella'] . '/work/registerme';
 
-            if($response->body == "Ok"){
-                //TODO delete history and inventory in db
-                
-            }else{
+            $result = file_get_contents($server . '/' . $_POST['plant']. '/' . $_POST['token']);
+            $this->data['workresult'] = $result;
 
+            // Handle the registration response
+            if (substr($result, 0, 2) == 'Ok')
+            {
+                // we're in
+                $key = substr($result, 3);
+                $this->data['message'] = "[Register: succeeded. key = ". $key . "]";
+                $this->properties->put('apikey', $key);
+                $balance = file_get_contents($this->data['umbrella'] . '/info/balance/' . $_POST['plant']);
+                $this->properties->put('balance', $balance);
+            } else {
+                // failed!
+                $this->data['message'] = "[Register: failed]";
+                $this->properties->put('balance', 0);
+                $this->properties->remove('apikey');
             }
-        }else{
-            //showing error message 
+            
+            $this->factory->clear('parts');
+            $this->factory->clear('bots');
+            $this->factory->clear('history');
+            $this->polish();
         }
-        redirect('manage');
     }
     
-    function register(){
-      if (isset($_POST['plant']) && isset($_POST['token'])) {
-        $this->load->library("unirest");
-        $url = 'https://umbrella.jlparry.com/work/registerme/'. $_POST['plant'] . '/' . $_POST['token'];       
-        $response = $this->unirest->get($url, $headers = array());
+    // reboot to clear off bots, parts & history.
+    function rebootme()
+    {
+        $server = $this->data['umbrella'] . '/work/rebootme';
 
-           $data = explode(" ", $response->body);
-            if($data[0] == "Ok"){
-                $this->session->apikey = $data[1]; 
-            }else{
-                //show $response->body
+        // we need our API key
+        $apikey = $this->properties->get('apikey');
+        $this->data['workparms'] = [['key' => 'key', 'value' => $apikey]];
+
+        $result = file_get_contents($server . '?key=' . $apikey);
+        $this->data['workresult'] = $result;
+
+        // Handle the registration response
+        if (substr($result, 0, 2) == 'Ok')
+        {
+            // we're in
+            $this->data['message'] = "[Reboot: succeeded]";
+            $this->factory->clear('parts');
+            $this->factory->clear('bots');
+            $this->factory->clear('history');
+            $balance = file_get_contents($this->data['umbrella'] . '/info/balance/' . $this->trader);
+            $this->properties->put('balance', $balance);
+        } else {
+            $this->data['message'] = "[Reboot: failed]";
+        }
+
+        $this->polish();
+    }
+    
+    // send request to RPC to buy bots
+    function sellbot()
+    {
+        // check if there is one and only one item checked
+        $invalid = 0;
+        
+        if(isset($_POST['cb'])) {
+            // get IDs
+            $ids = explode(',',implode(',',$_REQUEST['cb']));
+
+            // only one picked
+            if (count($ids) == 1) {
+                $server = $this->data['umbrella'] . '/work/buymybot';
+
+                // get pieces in bots table given $id
+                $pieces = explode(',',$this->factory->getPieces($ids[0]));
+
+                // we need our API key
+                $apikey = $this->properties->get('apikey');
+                $this->data['workparms'] = [
+                    ['key' => 'key', 'value' => $apikey],
+                    ['key' => 'part1', 'value' => $pieces[0]],
+                    ['key' => 'part2', 'value' => $pieces[1]],
+                    ['key' => 'part3', 'value' => $pieces[2]],
+                ];
+
+                $result = file_get_contents($server . '/' . $pieces[0] . '/' . $pieces[1]
+                                            . '/' . $pieces[2] . '?key=' . $apikey);
+                $this->data['workresult'] = $result;
+
+                // Handle the purchase at our end
+                if (substr($result, 0, 2) == 'Ok')
+                {
+                    // we're in, update bots table
+                    $this->factory->remove('bots', $ids[0]);
+
+                    // current balance
+                    $old_balance = $this->data['balance'] = $this->properties->get('balance');
+
+                    $balance = file_get_contents($this->data['umbrella'] . '/info/balance/' . $this->trader);
+                    $this->properties->put('balance', $balance);
+
+                    // update history table
+                    $amount = $balance - $old_balance;
+                    $message = "1 bot sold, id: ".$ids[0];
+                    $this->data['message'] = $message;
+                    $this->factory->addHistory('1', $amount, $message);
+                }
+            } else {
+                $invalid = 1;
             }
-      }else {
-          //showing error for requied inputs
-      }
-      redirect('manage');
+        } else {
+            $invalid = 1;
+        }
 
+        if ($invalid == 1)
+            $this->data['message'] = "Please pick a bot for sale!";
+        
+        $this->polish();
     }
 }
 

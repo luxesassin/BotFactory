@@ -25,29 +25,63 @@ class Factory extends CI_Model {
     public function remove($table, $which)
     {
         $this->db->trans_start();
-        $this->db->where('id', $which);
-        $this->db->delete($table); 
+        if ($table == 'parts') {
+            $this->db->delete($table, array('id' => $which)); 
+        } else {
+            $this->isValid = '0';
+            $this->db->update($table, $this, array('id' => $which));
+        }
         $this->db->trans_complete();
+    }
+    
+    // clear off a table specified
+    public function clear($table)
+    {
+        if ($table == 'parts') {
+            $this->db->empty_table($table); 
+        } else {
+            $this->db->update($table, array('isValid' => '0')); 
+        }
     }
     
     // retrieve all of the quotes
     public function all($table)
     {
-        $query = $this->db->get($table);
+        $this->db->from($table);
+        if ($table != 'parts')
+            $this->db->where("isValid = '1'");
+        if ($table != 'history')
+            $this->db->order_by("model asc, id asc");
+        $query = $this->db->get(); 
+        return $query->result();
+    }
+    
+    // retrieve all by group, applicable for parts
+    public function allByGroup($table, $group)
+    {
+        $this->db->from($table);
+        $this->db->where("piece = '$group'");
+        $this->db->order_by("model asc, id asc");
+        $query = $this->db->get(); 
         return $query->result();
     }
     
     // retrieve specified number of the quotes (records per page)
     public function partial($table, $numOfPage)
     {
-        $query = $this->db->get($table, $numOfPage);
+        if ($table != 'parts')
+            $this->db->where("isValid = '1'");
+        $query = $this->db->get($table, $numOfPage); 
         return $query->result();
     }
     
     // retrieve # of rows in the table specified
     public function getCount($table)
     {
-        return $this->db->count_all($table);
+        if ($table == 'parts')
+            return $this->db->count_all($table);
+        else 
+            return $this->db->count_all_results($table, array('isValid' =>'1'));
     }
 
     // get spent or earned amount from History. 
@@ -55,44 +89,38 @@ class Factory extends CI_Model {
     public function getAmount($type)
     {
         $query = $this->db->select_sum('amount', 'totalAmount')
-                      ->where("('$type' = '0' AND type = '$type') 
-                              OR ('$type' = 1 AND type != '0')")
-                      ->get('History');
+                      ->where("(('$type' = '0' AND type = '$type') 
+                              OR ('$type' = 1 AND type != '0'))
+                              AND isValid = '1'")
+                      ->get('history');
         $result = $query->result();
         return $result[0]->totalAmount;
     }
+    
+    // retrieve pieces in bots table given $id
+    public function getPieces($id)
+    {
+        $query = $this->db->select('pieces')
+                      ->where("id = '$id'")
+                      ->get('bots');
+        $result = $query->result();
+        return $result[0]->pieces;
+    }
 
-    // add Bots. $model: A, B, C, $comp: parts CAs, $image: png file
-    public function addBots($model, $comp, $image)
+    // add Bots. $model: a, b, c, $pieces: parts CAs
+    public function addBots($model, $pieces)
     {
         $this->db->trans_start();
         $data = array( 
             'model' => $model, 
-            'composition' => $comp, 
-            'image' => $image);
-        $this->db->insert('Bots', $data);
+            'pieces' => $pieces);
+        $this->db->insert('bots', $data);
         $this->db->trans_complete();
     }
-    
-    // add Parts. $code: A, B, C, $ca: A10001, $image: png file
-    public function addParts($code, $ca, $builtAt, $image)
-    {
-        $this->db->trans_start();
-        $data = array( 
-            'code' => $code, 
-            'ca' => $ca, 
-            'builtAt' => $builtAt, 
-            'builtDate' => date('Y-m-d H:i:s'), 
-            'image' => $image);
-        $this->db->insert('Parts', $data);
-        $this->db->trans_complete();
-    
-        
-    }
-    
+
     /* 
      * add Transaction. 
-     * $type: 0-purchase, 1-shipment, 2-return
+     * $type: 0-purchase, 1-sell/shipment, 2-return
      * $amount: amount of the transaction
      * $detail: details of the transaction
      */
@@ -105,14 +133,14 @@ class Factory extends CI_Model {
             'amount' => $amount, 
             'detail' => $detail 
         );
-        $this->db->insert("History", $data);
+        $this->db->insert("history", $data);
         $id = $this->db->insert_id();
         $data = array( 
             'transId' => makeTransId($id)
         );
         
         $this->db->where('id', $id);
-        $this->db->update('History', $data);
+        $this->db->update('history', $data);
         $this->db->trans_complete();
     }
 }

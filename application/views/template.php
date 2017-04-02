@@ -2,7 +2,6 @@
  if(!isset($_SESSION)) 
     { 
         session_start(); 
-        
     } 
 
 if(isset($_GET['logout'])) {
@@ -28,6 +27,7 @@ if(isset($_POST['username'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="assets/css/bootstrap.css" type='text/css'/>
+    <link rel='stylesheet' type='text/css' href='/assets/css/default.css'>
     <link rel='stylesheet' type='text/css' href='/assets/css/custom.css'>
     <link rel='stylesheet' type='text/css' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
     
@@ -40,7 +40,6 @@ if(isset($_POST['username'])) {
 
   </head>
   <body>
-
     <div class="container-fluid">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -60,10 +59,10 @@ if(isset($_POST['username'])) {
                         <a href="/History">History</a>
                     </li>
                     <li>
-                        <a href="/About">About</a>
+                        <a href="/Manage">Manage</a>
                     </li>
                     <li>
-                        <a href="/Manage">Manage</a>
+                        <a href="/About">About</a>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">User Role<b class="caret"></b></a>
@@ -83,6 +82,8 @@ if(isset($_POST['username'])) {
             </div>
         </div>
     </div>
-
+    <h5>
+    <p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
+    </h5>
   </body>
 </html>

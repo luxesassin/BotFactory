@@ -26,13 +26,12 @@ class Welcome extends Application
         $role = $this->session->userdata('userrole');
 
         // stock outline
-        $this->data['numParts'] = $this->factory->getCount('Parts');
-        $this->data['numBots'] = $this->factory->getCount('Bots');
         $this->data['spentAmount'] = $this->factory->getAmount('0');
         $this->data['earnedAmount'] = $this->factory->getAmount('1');
+        $this->data['numParts'] = $this->factory->getCount('parts');
+        $this->data['numBots'] = $this->factory->getCount('bots');
         
         // render the page
         $this->render(); 
     }
-
 }

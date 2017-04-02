@@ -1,3 +1,7 @@
+<!--
+ * This is the view for History page, which shows a list of 
+ * the current plant's history transactions.
+-->
 <h1>Transaction History</h1>
 
 <div class="row">
@@ -28,4 +32,3 @@
         </tbody>
     </table>
 </div>
-<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>

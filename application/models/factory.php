@@ -56,6 +56,17 @@ class Factory extends CI_Model {
         return $query->result();
     }
     
+    // retrieve data from history table per sortId
+    public function sortAll($sortId)
+    {
+        $col = getColumn($sortId);
+        $this->db->from('history');
+        $this->db->where("isValid = '1'");
+        $this->db->order_by($col);
+        $query = $this->db->get(); 
+        return $query->result();
+    }
+    
     // retrieve all by group, applicable for parts
     public function allByGroup($table, $group)
     {
@@ -97,6 +108,16 @@ class Factory extends CI_Model {
         return $result[0]->totalAmount;
     }
     
+    // retrieve model in parts table given $id
+    public function getModel($id)
+    {
+        $query = $this->db->select('model')
+                      ->where("id = '$id'")
+                      ->get('parts');
+        $result = $query->result();
+        return $result[0]->model;
+    }
+    
     // retrieve pieces in bots table given $id
     public function getPieces($id)
     {
@@ -106,7 +127,17 @@ class Factory extends CI_Model {
         $result = $query->result();
         return $result[0]->pieces;
     }
-
+    
+    // retrieve sort item per $id
+    public function getItem($id)
+    {
+        $query = $this->db->select('value')
+                      ->where("id = '$id'")
+                      ->get('sorts');
+        $result = $query->result();
+        return $result[0]->value;
+    }
+    
     // add Bots. $model: a, b, c, $pieces: parts CAs
     public function addBots($model, $pieces)
     {
@@ -120,7 +151,7 @@ class Factory extends CI_Model {
 
     /* 
      * add Transaction. 
-     * $type: 0-purchase, 1-sell/shipment, 2-return
+     * $type: 0-purchase, 1-sell/shipment, 2-return, 3-assemble
      * $amount: amount of the transaction
      * $detail: details of the transaction
      */
@@ -150,4 +181,14 @@ function makeTransId($id)
 {
     $transId = $id + 1700000;
     return "T".$transId;
+}
+
+// convert sortId to column name of history table
+function getColumn($sortId)
+{
+    $col = "transId";
+    if ($sortId == 2) $col = "transDate";
+    else if ($sortId == 3) $col = "type";
+    else if ($sortId == 4) $col = "amount";
+    return $col;
 }

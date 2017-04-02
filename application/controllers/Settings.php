@@ -15,13 +15,15 @@ class Settings extends Application
     function polish() {
         $this->data['pagebody'] = 'Settings';
         $this->data['umbrella'] = $this->properties->get('rpc');
+        $this->data['itemsperpage'] = $this->properties->get('page');
         $this->render();
     }
     
-    // update method. update RPC url.
+    // update method. update RPC url & items per page.
     function update() {
-        if (isset($_POST['url'])) {
+        if (isset($_POST['url']) && isset($_POST['items'])) {
             $this->properties->put('rpc', $_POST['url']);
+            $this->properties->put('page', $_POST['items']);
         }
         $this->polish();
     }

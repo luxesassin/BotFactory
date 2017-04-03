@@ -1,3 +1,6 @@
+<!--
+ * This is the view for About page.
+-->
 <h1>About This Site</h1>
 <p>This is our Comp 4711 first academic assignment. It is not related to, nor is it endorsed by any similar
      business from the real world. The examples used on this page is for practice and submission for our first assignment.</p>
@@ -7,7 +10,4 @@
 <h2>Technologies </h2>
 <p>The website uses the jquery Javascript and bootstrap framework.</p>
 <h2>Extra</h2>
-<p>This website is created in Februarary of 2017 for Comp 4711 BCIT</a>.</p><br/>
-<h5>
-<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
-</h5>
+<p>This website is created in Februarary of 2017 for Comp 4711 BCIT</a>.</p>

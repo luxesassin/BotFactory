@@ -1,66 +1,55 @@
+<!--
+ * This is the view for assembly page.
+ * User can selects parts from list to assemble a new bot or
+ * return it to head office.
+-->
+
 <h1>Assembly Page</h1>
-<button onclick="buildIt()">Build it</button>
-<button onclick="">Return to head office</button>
 <h3>Select Parts</h3>
-<div class="row">
-    {parts}
-    <div class="col-sm-4">
-        <input type="checkbox" name="partCheckbox" value="{image}">
-        <img width="80%" height="80%" src="/pix/{image}"/>
+<form name="frm" id="frm" method="post" action="/Assembly/handle">
+    <div class="row">
+        <div class="col-sm-4">
+            {parts_data1}
+            <div class="parts-align">
+                <input type="checkbox" name="cb1[]" value="{id}">
+                <img width="60%" height="60%" src="/pix/{image}" title="{model}, {plant}"/>
+            </div>
+            {/parts_data1}
+        </div>
+         <div class="col-sm-4">
+            {parts_data2}
+            <div class="parts-align">
+                <input type="checkbox" name="cb2[]" value="{id}">
+                <img width="60%" height="60%" src="/pix/{image}" title="{model}, {plant}"/>
+            </div>
+            {/parts_data2}
+         </div>
+         <div class="col-sm-4">
+            {parts_data3}
+            <div class="parts-align">
+                <input type="checkbox" name="cb3[]" value="{id}">
+                <img width="60%" height="60%" src="/pix/{image}" title="{model}, {plant}"/>
+            </div>
+            {/parts_data3}
+         </div>
+    </div><br>
+    
+    <h3>Assembled Bots</h3>
+    <div class="row">
+        {bots_data}
+        <div class="col-sm-4">
+            <div class="parts-align">
+                <input type="checkbox" name="cb[]" value="{id}">
+                <img width="60%" height="60%" src="/pix/{model}.jpg" title="model: {model}"/>
+            </div>
+        </div>
+        {/bots_data}
     </div>
-    {/parts}
-</div>
-
-<br>
-<h3>Built bot<h3>
-<div class="row">
-    <div class="col">
-        <img id="head" src=""/>
+    <div class="row btn-align2">
+        <span><input type="submit" name="assemble" value="Assemble" class="btn btn-5"/></span>
+        <span class="span-align2"><input type="submit" name="recycle" value="Recycle" class="btn btn-5"/></span>
     </div>
-</div>
-<div class="row">
-    <div class="col">
-        <img id="body" src=""/>
+    <div class="row msg">
+    {message}
     </div>
-</div>
-<div class="row">
-    <div class="col">
-        <img id="foot" src=""/>
-    </div>
-</div>
-
-<h5>
-<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
-</h5>
-
-<script>
-    function buildIt(){
-        var checkedItems = document.querySelectorAll('input[name="partCheckbox"]:checked');
-        var numChecked = checkedItems.length;
-        
-        if(numChecked != 3){
-             alert('Select correct each of head,body and foot part');
-             return;
-         }
-         
-         var head,body,foot;
-         for(var i=0; i<numChecked; i++){
-             if(/[1]/.test(checkedItems[i].value))
-                 head = checkedItems[i];
-             else if(/[2]/.test(checkedItems[i].value))
-                 body = checkedItems[i];
-             else if(/[3]/.test(checkedItems[i].value))
-                 foot = checkedItems[i];
-         }
-         
-         if(!head || !body || !foot){
-             alert('Select correct each of head,body and foot part');
-             return;
-         }
-         
-         document.getElementById("head").src="/pix/"+head.value;
-         document.getElementById("body").src="/pix/"+body.value;
-         document.getElementById("foot").src="/pix/"+foot.value;
-         
-    }
-</script> 
+</form>
